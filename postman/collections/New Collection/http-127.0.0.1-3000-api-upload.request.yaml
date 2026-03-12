@@ -1,0 +1,14 @@
+$kind: http-request
+name: http://127.0.0.1:3000/api/upload
+url: http://127.0.0.1:3000/api/upload
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src:
+        - /C:/Users/Administrator/Desktop/新建文件夹/12.txt
+      description: ""
+      disabled: false
+order: 1151724324860244
