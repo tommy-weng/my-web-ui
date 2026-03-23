@@ -45,9 +45,9 @@ const upload = multer({
 });
 
 
-// 0. 首页：返回登录页
+// 0. 首页：返回前端构建后的页面
 app.get('/', (req, res) => {
-    res.sendFile(path.join(PUBLIC_DIR, 'login.html'));
+    res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
 // 1. 实现一个 GET 接口：获取数据
