@@ -10,6 +10,10 @@ const multer = require('multer');
 app.use(express.json());
 app.use(cors()); // 新增：允许所有来源访问，解决跨域问题
 
+// 静态资源目录
+const PUBLIC_DIR = path.join(__dirname, 'public');
+app.use(express.static(PUBLIC_DIR));
+
 // 简单的日志中间件
 app.use((req, res, next) => {
     console.log(`收到请求: ${req.method} ${req.url}`);
@@ -41,9 +45,9 @@ const upload = multer({
 });
 
 
-// 0. 实现一个 GET 接口：显示标题
+// 0. 首页：返回登录页
 app.get('/', (req, res) => {
-    res.send('<h1>欢迎来到我的第一个 Express 服务器！</h1>');
+    res.sendFile(path.join(PUBLIC_DIR, 'login.html'));
 });
 
 // 1. 实现一个 GET 接口：获取数据

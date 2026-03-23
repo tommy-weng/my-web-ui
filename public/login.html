@@ -27,9 +27,8 @@
             const msgDom = document.getElementById('msg');
 
             try {
-                // 向你的 Linux 服务器发送请求
-                // 注意：如果 Linux 在云端，请将 localhost 换成服务器的公网 IP
-                const response = await fetch('http://192.168.1.7:3000/api/login', {
+                // 同源请求（由 Express 静态服务提供页面）
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: user, password: pw })
