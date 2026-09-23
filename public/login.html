@@ -9,6 +9,20 @@
         input { display: block; width: 80%; margin: 10px auto; padding: 8px; }
         button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ===== 彩色球区域 ===== */
+        #ballStage { display: none; max-width: 480px; margin: 0 auto; }
+        .balls { display: flex; justify-content: center; gap: 40px; margin-top: 20px; }
+        .ball {
+            width: 80px; height: 80px; border-radius: 50%;
+            transition: transform .2s, box-shadow .2s, background-color .3s;
+        }
+        /* 焦点球：放大 + 白色描边 + 同色光晕 */
+        .ball.focused {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 4px #fff, 0 0 18px 6px currentColor;
+        }
+        #hint { margin-top: 50px; color: #666; }
     </style>
 </head>
 <body>
@@ -23,33 +37,17 @@
         </form>
     </div>
 
-    <script>
-        async function doLogin(e) {
-            e.preventDefault(); // 阻止表单默认提交刷新页面
+    <!-- 登录成功后展示的三个彩色球 -->
+    <div id="ballStage">
+        <h3>🎉 登录成功，欢迎！</h3>
+        <div class="balls">
+            <div class="ball" id="ball0"></div>
+            <div class="ball" id="ball1"></div>
+            <div class="ball" id="ball2"></div>
+        </div>
+        <p id="hint">按 Enter 键：改变当前球的颜色，焦点自动切换到下一个球</p>
+    </div>
 
-            const user = document.getElementById('user').value;
-            const pw = document.getElementById('pw').value;
-            const msgDom = document.getElementById('msg');
-            const btn = document.getElementById('loginBtn');
-
-            try {
-                btn.disabled = true; // 防止 Enter 连按重复提交
-                // 同源请求（由 Express 静态服务提供页面）
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username: user, password: pw })
-                });
-
-                const result = await response.json();
-                msgDom.innerText = result.message;
-                msgDom.style.color = response.ok ? 'green' : 'red';
-            } catch (error) {
-                msgDom.innerText = "无法连接到服务器，请检查后端是否运行";
-            } finally {
-                btn.disabled = false;
-            }
-        }
-    </script>
+    <script src="login.js"></script>
 </body>
 </html>
