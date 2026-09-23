@@ -8,25 +8,32 @@
         .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 300px; margin: 0 auto; }
         input { display: block; width: 80%; margin: 10px auto; padding: 8px; }
         button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
     <div class="card">
         <h3>系统登录</h3>
-        <input type="text" id="user" placeholder="用户名">
-        <input type="password" id="pw" placeholder="密码">
-        <button onclick="doLogin()">登录</button>
-        <p id="msg"></p>
+        <form onsubmit="doLogin(event)">
+            <input type="text" id="user" placeholder="用户名" autofocus>
+            <input type="password" id="pw" placeholder="密码">
+            <button type="submit" id="loginBtn">登录</button>
+            <p id="msg"></p>
+        </form>
     </div>
 
     <script>
-        async function doLogin() {
+        async function doLogin(e) {
+            e.preventDefault(); // 阻止表单默认提交刷新页面
+
             const user = document.getElementById('user').value;
             const pw = document.getElementById('pw').value;
             const msgDom = document.getElementById('msg');
+            const btn = document.getElementById('loginBtn');
 
             try {
+                btn.disabled = true; // 防止 Enter 连按重复提交
                 // 同源请求（由 Express 静态服务提供页面）
                 const response = await fetch('/api/login', {
                     method: 'POST',
@@ -39,6 +46,8 @@
                 msgDom.style.color = response.ok ? 'green' : 'red';
             } catch (error) {
                 msgDom.innerText = "无法连接到服务器，请检查后端是否运行";
+            } finally {
+                btn.disabled = false;
             }
         }
     </script>
