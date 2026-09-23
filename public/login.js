@@ -78,3 +78,14 @@ document.addEventListener('keydown', (e) => {
     focusedIndex = (focusedIndex + 1) % balls.length;     // 焦点轮转到下一个球
     renderFocus();
 });
+
+// 支持触屏/鼠标点击（手机上没有 Enter 键）：点击哪个球就给哪个球换色
+balls.forEach((ball, i) => {
+    ball.addEventListener('click', () => {
+        if (!ballsActive) return;
+
+        paintBall(ball, Number(ball.dataset.colorIndex) + 1); // 被点击的球换成下一个颜色
+        focusedIndex = (i + 1) % balls.length;                // 焦点轮转到下一个球
+        renderFocus();
+    });
+});

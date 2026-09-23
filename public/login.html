@@ -2,19 +2,39 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <!-- 移动端自适应的关键：页面宽度 = 设备宽度，初始缩放 1，适配刘海屏 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>联调测试</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; }
-        .card { border: 1px solid #ccc; padding: 20px; border-radius: 8px; max-width: 300px; margin: 0 auto; }
-        input { display: block; width: 80%; margin: 10px auto; padding: 8px; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+        /* 移动端自适应基础：边距/尺寸用 clamp()，在小屏和大屏之间平滑缩放 */
+        * { box-sizing: border-box; }
+        body {
+            font-family: sans-serif; text-align: center;
+            padding: clamp(16px, 5vw, 50px);          /* 手机 16px，桌面最大 50px */
+        }
+        .card {
+            border: 1px solid #ccc; padding: 20px; border-radius: 8px;
+            max-width: 300px; width: 100%; margin: 0 auto; /* 小屏撑满可用宽度 */
+        }
+        input {
+            display: block; width: 100%; margin: 10px auto; padding: 10px;
+            font-size: 16px; /* iOS：输入框字号 ≥16px，聚焦时才不会自动放大页面 */
+        }
+        button {
+            background: #007bff; color: white; border: none;
+            padding: 12px 24px; width: 100%; font-size: 16px; cursor: pointer; /* 更大的触控区域 */
+        }
         button:disabled { opacity: 0.6; cursor: not-allowed; }
 
         /* ===== 彩色球区域 ===== */
         #ballStage { display: none; max-width: 480px; margin: 0 auto; }
-        .balls { display: flex; justify-content: center; gap: 40px; margin-top: 20px; }
+        .balls { display: flex; justify-content: center; flex-wrap: wrap; gap: clamp(12px, 6vw, 40px); margin-top: 20px; }
         .ball {
-            width: 80px; height: 80px; border-radius: 50%;
+            width: clamp(56px, 18vw, 80px);           /* 球随屏幕宽度缩放：56px ~ 80px */
+            height: clamp(56px, 18vw, 80px);
+            border-radius: 50%;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent; /* 去掉手机点击时的高亮框 */
             transition: transform .2s, box-shadow .2s, background-color .3s;
         }
         /* 焦点球：放大 + 白色描边 + 同色光晕 */
@@ -45,7 +65,7 @@
             <div class="ball" id="ball1"></div>
             <div class="ball" id="ball2"></div>
         </div>
-        <p id="hint">按 Enter 键：改变当前球的颜色，焦点自动切换到下一个球</p>
+        <p id="hint">按 Enter 键或点击彩球：改变当前球的颜色，焦点自动切换到下一个球</p>
     </div>
 
     <script src="login.js"></script>
