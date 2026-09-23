@@ -80,11 +80,22 @@ document.addEventListener('keydown', (e) => {
 });
 
 // 支持触屏/鼠标点击（手机上没有 Enter 键）：点击页面任意位置即可换色
-document.addEventListener('click', () => {
+document.addEventListener('click', (e) => {
     if (!ballsActive) return;
 
+    // 新功能：点击的是某个球 -> 焦点聚焦到被点击的球，并对该球换色（不轮转）
+    const clickedIndex = balls.findIndex(ball => ball.contains(e.target));
+    if (clickedIndex !== -1) {
+        focusedIndex = clickedIndex;
+        const clickedBall = balls[clickedIndex];
+        paintBall(clickedBall, Number(clickedBall.dataset.colorIndex) + 1);
+        renderFocus();
+        return;
+    }
+
+    // 点击球以外的区域：当前焦点球换成下一个颜色，焦点轮转到下一个球
     const ball = balls[focusedIndex];
-    paintBall(ball, Number(ball.dataset.colorIndex) + 1); // 当前焦点球换成下一个颜色
+    paintBall(ball, Number(ball.dataset.colorIndex) + 1);
 
     focusedIndex = (focusedIndex + 1) % balls.length;     // 焦点轮转到下一个球
     renderFocus();
